@@ -3,25 +3,28 @@
 html, body{
     height: 100%; width: 100%; margin: 0; 
     font-family: 'Comfortaa', sans-serif;
-    background-color: darkslategrey;
+    background-color: darkcyan;
     color: lightcyan;
 }
 .side{
+    background-color: cadetblue;
+    text-align: right;
     position: fixed;
-    float:left;
-    background-color: goldenrod;
-    height: 100%;
+    height: 90%;
     width: 30%;
+    padding: 5%;
+    min-width: 300px;
 }
 .main{
-    float:right;
-    background-color: blueviolet;
+    margin-left: 30%;
+    position: relative;
     width: 70%;
+    min-width: 300px;
 }
 .main a{
     height: 300px;
     width: 400px;
     margin: 10px auto;
     display: block;
-    background-color: wheat;
+    background-color: cadetblue;
 }
