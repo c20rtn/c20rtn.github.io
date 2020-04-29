@@ -3,29 +3,23 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Jack Corton Website</title>
         <meta name="author" content="Jack">
         <link rel="stylesheet" href="CSS/site.css">
-        <link rel="stylesheet" href="CSS/icono.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        
+                    
+        <title>TensorFlow.js Tutorial</title>
+        <!-- Import TensorFlow.js -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+        <!-- Import tfjs-vis -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
         <script src="Scripts/site.js"></script>
-
     </head>
 
     <body>
-        <div class="header col-lg-6">
-            Jack Corton
-            <a>Contact</a>
-            <a>Projects</a>
-            <a>About</a>
-        </div>
-    
-        <div class="left">
-            <img src="https://preppywallpapers.com/wp-content/uploads/2016/10/blue-waves-iphone-wallpaper.jpg">
-        </div>
-        <div class="right">
-            <p>
-                
-            </p>
+        <div class="row">
+            <button onclick="learn()">Click me</button>
+            <h1 id="foo"></h1>
         </div>
     </body>
 </html>
