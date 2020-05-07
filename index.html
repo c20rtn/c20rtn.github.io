@@ -8,18 +8,172 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         
                     
-        <title>TensorFlow.js Tutorial</title>
+        <title>Image Colourisation</title>
         <!-- Import TensorFlow.js -->
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
         <!-- Import tfjs-vis -->
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
-        <script src="Scripts/site.js"></script>
+        <script src="Scripts/jquery-3.5.0.min.js"></script>
     </head>
 
     <body>
-        <div class="row">
-            <button onclick="learn()">Click me</button>
-            <h1 id="foo"></h1>
-        </div>
+        <input type="file" onChange="show_image(this);" name="img" multiple>
+        <h3>Canvas</h3>
+        <canvas id="canvas" width="512" height="512"></canvas>
+
+        <script>
+            console.log('Hello TensorFlow');
+            console.log(tf.version);
+
+            async function show_image(obj){
+                if (FileReader)
+                {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(obj.files[0]);
+                    reader.onload = function (e) {
+                        var image=new Image();
+                        image.src=e.target.result;
+                        image.onload = async function () {
+                            canvas = document.querySelector("#canvas");
+
+                            ctx = canvas.getContext("2d");
+                            ctx.drawImage(image, 0, 0);
+
+                            //get data from image
+                            var imgData = ctx.getImageData(0, 0, 256, 256).data;
+
+                            //alter image data
+                            //remove A value from RGBA
+                            var len = imgData.length;
+                            var RGB = []
+                            
+                            //get RGB data
+                            for (i = 0; i < len; i++) {
+                                if ((i+1) % 4 !== 0) {
+                                    RGB.push(imgData[i]);
+                                }
+                            }
+                            
+
+                            //convert to L*A*B*
+                            var RGBlen = RGB.length;
+                            var LAB = [];
+                            var L_layer = [];
+
+                            for (i = 0; i < RGBlen; i+=3) {
+                                LAB.push(rgb2lab([RGB[i], RGB[i+1], RGB[i+2]]));
+                                L_layer.push(LAB[LAB.length - 1][0]);
+                            }
+
+                            //get output
+                            var AB = await learn(L_layer);
+                            var L_len = L_layer.length;
+                            var output = [];
+
+                            //convert LAB to RGB
+                            console.log("Test image RGB  [[[222. 231. 248.]");
+                            console.log("Test image LAB  [[[ 91.4410478    0.2373309   -9.24941604]");
+                            console.log("Output image LAB Guess (OG MODEL)  [[[[ 91.4410478  6.2803063 -43.889267 ]");
+                            console.log("LAB - " + L_layer[0] + ", " + AB[(0)] + ", " + AB[1]);
+
+                            for (i = 0; i < L_len; i++) {
+                                //RGB image
+                                output.push(lab2rgb([L_layer[i], AB[(i*2)]*128, AB[(i*2)+1]*128]));
+                            }
+                            console.log("output length - " + output.length);
+                            output = output.flat();
+
+                            //output in canvas
+                            var width = 256,
+                                height = 256,
+                                buffer = new Uint8ClampedArray(width * height * 4); // have enough bytes
+
+                            var bufflen = width * height;
+                            for(var i = 0; i < bufflen; i++) {
+                                buffer[(i*4)] = output[(i*3)+0];
+                                buffer[(i*4)+1] = output[(i*3)+1];
+                                buffer[(i*4)+2] = output[(i*3)+2];
+                                buffer[(i*4)+3] = 255;
+                            }
+
+                            // create imageData object
+                            var idata = ctx.createImageData(width, height);
+
+                            // set our buffer as source
+                            idata.data.set(buffer);
+
+                            // update canvas with new data
+                            ctx.putImageData(idata, 256, 256);
+                        };
+                    }
+                }
+                else
+                {
+                    alert("boo boo")
+                }
+            }
+
+            async function learn(input){
+                const model = await tf.loadLayersModel('https://c20rtn.github.io/Models/model.json');
+                model.summary()
+                console.log("weights - " + model.layers[0].getWeights().length)
+
+                console.log("Input - " + input.length)
+
+                let output = model.predict(tf.tensor4d(input, [1, 256, 256, 1]));
+                let values = output.dataSync();
+                let arr = Array.from(values);
+
+                console.log("Output - " + arr.length)
+
+                return arr;
+            }
+
+            function lab2rgb(lab){
+                var y = (lab[0] + 16) / 116,
+                    x = lab[1] / 500 + y,
+                    z = y - lab[2] / 200,
+                    r, g, b;
+
+                x = 0.95047 * ((x * x * x > 0.008856) ? x * x * x : (x - 16/116) / 7.787);
+                y = 1.00000 * ((y * y * y > 0.008856) ? y * y * y : (y - 16/116) / 7.787);
+                z = 1.08883 * ((z * z * z > 0.008856) ? z * z * z : (z - 16/116) / 7.787);
+
+                r = x *  3.2406 + y * -1.5372 + z * -0.4986;
+                g = x * -0.9689 + y *  1.8758 + z *  0.0415;
+                b = x *  0.0557 + y * -0.2040 + z *  1.0570;
+
+                r = (r > 0.0031308) ? (1.055 * Math.pow(r, 1/2.4) - 0.055) : 12.92 * r;
+                g = (g > 0.0031308) ? (1.055 * Math.pow(g, 1/2.4) - 0.055) : 12.92 * g;
+                b = (b > 0.0031308) ? (1.055 * Math.pow(b, 1/2.4) - 0.055) : 12.92 * b;
+
+                return [Math.round(Math.max(0, Math.min(1, r)) * 255), 
+                        Math.round(Math.max(0, Math.min(1, g)) * 255), 
+                        Math.round(Math.max(0, Math.min(1, b)) * 255)]
+            }
+
+
+            function rgb2lab(rgb){
+                var r = rgb[0] / 255,
+                    g = rgb[1] / 255,
+                    b = rgb[2] / 255,
+                    x, y, z;
+
+                r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+                g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+                b = (b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
+
+                x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
+                y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
+                z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
+
+                x = (x > 0.008856) ? Math.pow(x, 1/3) : (7.787 * x) + 16/116;
+                y = (y > 0.008856) ? Math.pow(y, 1/3) : (7.787 * y) + 16/116;
+                z = (z > 0.008856) ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
+
+                return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)]
+            }
+
+
+        </script>
     </body>
 </html>
