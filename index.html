@@ -18,7 +18,7 @@
     <body>
         <div class="container">
             <div class="row header-row">
-                <h1>Colourisation</h1><br/>
+                <h1>Colourisation</h1><br>
                 <input type="file" onChange="show_image(this);" name="img" multiple>
             </div>
             <div class="row function-row">
@@ -60,7 +60,8 @@
                             ctx.drawImage(image, 0, 0);
 
                             //get data from image
-                            document.getElementById("message").innerHTML = "Extract Image Data";
+                            document.getElementById("message").innerHTML = "<div class=\"spinner\"><div class=\"double-bounce1\"></div><div class=\"double-bounce2\"></div></div>";
+                
                             var imgData = ctx.getImageData(0, 0, 256, 256).data;
                             //alter image data
                             //remove A value from RGBA
@@ -75,7 +76,6 @@
                             }
 
                             //convert to L*A*B*
-                            document.getElementById("message").innerHTML = "Convert to L*A*B*";
                             var RGBlen = RGB.length;
                             var LAB = [];
                             var L_layer = [];
@@ -98,7 +98,6 @@
                             console.log("output length - " + output.length);
                             output = output.flat();
 
-                            document.getElementById("message").innerHTML = "Output New Image";
                             //output in canvas
                             var width = 256,
                                 height = 256,
@@ -120,7 +119,7 @@
 
                             // update canvas with new data
                             output_ctx.putImageData(idata, 0, 0);
-                            document.getElementById("message").innerHTML = "Done";
+                            document.getElementById("message").innerHTML = "<br><br><br><br><br><br>Done";
                         };
                     }
                 }
@@ -131,14 +130,12 @@
             }
 
             async function learn(input){
-                document.getElementById("message").innerHTML = "Retrieve Model";
                 const model = await tf.loadLayersModel('https://raw.githubusercontent.com/c20rtn/Greyscale-Colourisation-GAN/master/Models/ColorGAN/js/model.json');
                 model.summary()
                 console.log("weights - " + model.layers[0].getWeights().length)
 
                 console.log("Input - " + input.length)
 
-                document.getElementById("message").innerHTML = "Predict Colourisations";
                 let output = model.predict(tf.tensor4d(input, [1, 256, 256, 1]));
                 let values = output.dataSync();
                 let arr = Array.from(values);
