@@ -19,12 +19,26 @@
         <div class="container">
             <div class="row header-row">
                 <div class="col text-center">
-                    <h1>Colourisation</h1><br>
+                    <h1>Colourisation Through Machine Learning</h1>
                 </div>
             </div>
             <div class="row image-row">
                 <div class="col text-center">
-                    <h4>Choose a Local Image to Input or...</h4>
+                    <h2>What is it?</h2>
+                    <p>
+                        This colourisation web application uses machine learning methods to colour grayscale images.
+                    <br>
+                        It extracts the grayscale values by converting the colour space and predicting the reamining colour values.
+                    <br>
+                        The models were built in Keras for Python and translated to TensorflowJS models for website usage.
+                    <br>
+                        The GitHub repository can be found <a href="https://github.com/c20rtn/Greyscale-Colourisation-GAN">here.</a>
+                    </p>
+                </div>
+            </div>
+            <div class="row image-row">
+                <div class="col text-center">
+                    <h4>Choose a Local 256 by 256 Image to Input or...</h4>
                     <input type="file" class="upload" onChange="show_image(this);" name="img" multiple>
                     <br>
                     <br>
@@ -34,6 +48,25 @@
                     <img class="sample" id="3" width="128" width="128" onclick="sampleimage(this.id);" src="Images/sample3.jpg"></img>
                     <img class="sample" id="4" width="128" width="128" onclick="sampleimage(this.id);" src="Images/sample4.jpg"></img>
                     <br>
+                    <br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="alpha">
+                            <label class="form-check-label" for="exampleRadios1">
+                                Alpha Model
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="beta">
+                            <label class="form-check-label" for="exampleRadios2">
+                                Beta Model
+                            </label>
+                        </div>
+                        <div class="form-check disabled">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="gan" checked>
+                            <label class="form-check-label" for="exampleRadios3">
+                                GAN Model
+                            </label>
+                        </div>
                 </div>
             </div>
             <div class="row function-row">
@@ -107,7 +140,11 @@
             async function colour() {
                 //get data from image
                 document.getElementById("message").innerHTML = "<div class=\"spinner\"><div class=\"double-bounce1\"></div><div class=\"double-bounce2\"></div></div>";
-    
+                
+                document.getElementById("alpha").disabled = true;
+                document.getElementById("beta").disabled = true;
+                document.getElementById("gan").disabled = true;
+
                 canvas = document.querySelector("#input");
                 ctx = canvas.getContext("2d");
                 var imgData = ctx.getImageData(0, 0, 256, 256).data;
@@ -128,20 +165,35 @@
                 var LAB = [];
                 var L_layer = [];
 
-                for (i = 0; i < RGBlen; i+=3) {
-                    LAB.push(rgb2lab([RGB[i], RGB[i+1], RGB[i+2]]));
-                    L_layer.push((LAB[LAB.length - 1][0] / 50) - 1);
+                if(document.getElementById('gan').checked){
+                    for (i = 0; i < RGBlen; i+=3) {
+                        LAB.push(rgb2lab([RGB[i], RGB[i+1], RGB[i+2]]));
+                        L_layer.push((LAB[LAB.length - 1][0] / 50) - 1);
+                    }
                 }
-
+                else{
+                    for (i = 0; i < RGBlen; i+=3) {
+                        LAB.push(rgb2lab([RGB[i], RGB[i+1], RGB[i+2]]));
+                        L_layer.push(LAB[LAB.length - 1][0]);
+                    }
+                }
                 //get output
                 var AB = await learn(L_layer);
                 var L_len = L_layer.length;
                 var output = [];
 
-
-                for (i = 0; i < L_len; i++) {
-                    //RGB image
-                    output.push(lab2rgb([(L_layer[i] + 1) * 50, AB[(i*2)]*128, AB[(i*2)+1]*128]));
+                
+                if(document.getElementById('gan').checked){
+                    for (i = 0; i < L_len; i++) {
+                        //RGB image
+                        output.push(lab2rgb([(L_layer[i] + 1) * 50, AB[(i*2)]*128, AB[(i*2)+1]*128]));
+                    }
+                }
+                else{
+                    for (i = 0; i < L_len; i++) {
+                        //RGB image
+                        output.push(lab2rgb([L_layer[i], AB[(i*2)]*128, AB[(i*2)+1]*128]));
+                    }
                 }
                 console.log("output length - " + output.length);
                 output = output.flat();
@@ -170,18 +222,48 @@
                 // update canvas with new data
                 output_ctx.putImageData(idata, 0, 0);
                 document.getElementById("message").innerHTML = "<br><br><br><br><br><br>Done";
+
+                document.getElementById("alpha").disabled = false;
+                document.getElementById("beta").disabled = false;
+                document.getElementById("gan").disabled = false;
             };
             async function learn(input){
-                const model = await tf.loadLayersModel('https://raw.githubusercontent.com/c20rtn/Greyscale-Colourisation-GAN/master/Models/ColorGAN/js/model.json');
-                model.summary()
+                if(document.getElementById('alpha').checked){
+                    const model = await tf.loadLayersModel('https://raw.githubusercontent.com/c20rtn/Greyscale-Colourisation-GAN/master/Models/Alpha/js/model.json');
+                    model.summary()
 
-                let output = model.predict(tf.tensor4d(input, [1, 256, 256, 1]));
-                let values = output.dataSync();
-                let arr = Array.from(values);
+                    let output = model.predict(tf.tensor4d(input, [1, 256, 256, 1]));
+                    let values = output.dataSync();
+                    let arr = Array.from(values);
 
-                console.log("Output - " + arr.length)
+                    console.log("Output - " + arr.length)
 
-                return arr;
+                    return arr;
+                }
+                else if(document.getElementById('beta').checked){
+                    const model = await tf.loadLayersModel('https://raw.githubusercontent.com/c20rtn/Greyscale-Colourisation-GAN/master/Models/Beta/js/model.json');
+                    model.summary()
+
+                    let output = model.predict(tf.tensor4d(input, [1, 256, 256, 1]));
+                    let values = output.dataSync();
+                    let arr = Array.from(values);
+
+                    console.log("Output - " + arr.length)
+
+                    return arr;
+                }
+                else{
+                    const model = await tf.loadLayersModel('https://raw.githubusercontent.com/c20rtn/Greyscale-Colourisation-GAN/master/Models/GAN/js/model.json');
+                    model.summary()
+
+                    let output = model.predict(tf.tensor4d(input, [1, 256, 256, 1]));
+                    let values = output.dataSync();
+                    let arr = Array.from(values);
+
+                    console.log("Output - " + arr.length)
+
+                    return arr;
+                }
             }
 
             function lab2rgb(lab){
