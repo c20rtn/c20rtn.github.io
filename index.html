@@ -1,315 +1,116 @@
-<!doctype html>
-
+<!DOCTYPE HTML>
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta name="author" content="Jack">
-        <link rel="stylesheet" href="CSS/site.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        
-                    
-        <title>Image Colourisation</title>
-        <!-- Import TensorFlow.js -->
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
-        <!-- Import tfjs-vis -->
-        <script src="Scripts/jquery-3.5.0.min.js"></script>
+        <meta name="description" content="specifically descrpitive content about your page here">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Cardo&display=swap" rel="stylesheet">
+        <link rel="shortcut icon" type="image/x-icon" href="Images/j.ico" />
+        <link rel="stylesheet" href="CSS/style.css">
+        <link rel="stylesheet" href="CSS/cursor.css">
+        <title>Jack Corton</title>
     </head>
 
-    <body style="background-color:cadetblue;">
-        <div class="container">
-            <div class="row header-row">
-                <div class="col text-center">
-                    <h1>Colourisation Through Machine Learning</h1>
-                </div>
+    <body>
+        <div class="layout">
+            <div class="head">
+                <h1>Jack Corton.</h1><hr>
             </div>
-            <div class="row image-row">
-                <div class="col text-center">
-                    <h2>What is it?</h2>
+
+            <section class="about">
+                <article>
+                    <h2>About</h2>
                     <p>
-                        This colourisation web application uses machine learning methods to colour grayscale images.
-                    <br>
-                        It extracts the grayscale values by converting the colour space and predicting the reamining colour values.
-                    <br>
-                        The models were built in Keras for Python and translated to TensorflowJS models for website usage.
-                    <br>
-                        The GitHub repository can be found <a href="https://github.com/c20rtn/Greyscale-Colourisation-GAN">here.</a>
+                        I am a reliable and adaptable Software Develoepr experienced in web development, Microsoft’s .NET platform (ASP.NET MVC, .NET core, C#) and playing an important part in agile work environments. <br>
+                        I have recently completed my final year Bachelor’s degree in Computer Science and I am currently on course to achieve a First classification. <br>
+                        I am looking for a role in which I will apply myself while furthering my programming and interpersonal skills with a team that shares my commitment. 
                     </p>
-                </div>
-            </div>
-            <div class="row image-row">
-                <div class="col text-center">
-                    <h4>Choose a Local 256 by 256 Image to Input or...</h4>
-                    <input type="file" class="upload" onChange="show_image(this);" name="img" multiple>
-                    <br>
-                    <br>
-                    <h4>...Choose a Sample Image</h4>
-                    <img class="sample" id="1" width="128" width="128" onclick="sampleimage(this.id);" alt="Sea Cliff" src="Images/sample1.jpg"></img>
-                    <img class="sample" id="2" width="128" width="128" onclick="sampleimage(this.id);" alt="Mountain Lake" src="Images/sample2.png"></img>
-                    <img class="sample" id="3" width="128" width="128" onclick="sampleimage(this.id);" alt="Mountain Scene" src="Images/sample3.jpg"></img>
-                    <img class="sample" id="4" width="128" width="128" onclick="sampleimage(this.id);" alt="City Building" src="Images/sample4.jpg"></img>
-                    <br>
-                    <br>
-                    <h4>Finally Choose a Colourisation Generator</h4>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="alpha">
-                            <label class="form-check-label" for="exampleRadios1">
-                                Alpha Model
-                            </label>
+                </article>
+            </section>
+
+            <section class="skills">
+                <article>
+                    <h2>Skills</h2>
+                    <div class="row">
+                        <div class="column">
+                            <h3>Front End</h3>
+                            <dl>
+                                <dt>HTML5</dt>
+                                <dt>CSS</dt>
+                                <dt>JavaScript</dt>
+                                <dt>Razor Pages</dt>
+                                <dt>jQuery</dt>
+                                <dt>AJAX</dt>
+                            </dl>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="beta">
-                            <label class="form-check-label" for="exampleRadios2">
-                                Beta Model
-                            </label>
+                        <div class="column">
+                            <h3>Back End</h3>
+                            <dl>
+                                <dt>C#</dt>
+                                <dt>.NET Core</dt>
+                                <dt>ASP.NET MVC</dt>
+                                <dt>LINQ</dt>
+                                <dt>ASP.NET Web Forms</dt>
+                                <dt>SQL / MSSQL</dt>
+                            </dl>
                         </div>
-                        <div class="form-check disabled">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="gan" checked>
-                            <label class="form-check-label" for="exampleRadios3">
-                                GAN Model
-                            </label>
-                        </div>
-                </div>
-            </div>
-            <div class="row function-row">
-                <div class="col-sm text-center">
-                    <h3>Input</h3>
-                    <div class="canvas-box">
-                        <canvas id="input" width="256" height="256"></canvas>
                     </div>
-                </div>
-                <div class="col-sm text-center">
-                    <h5 id="message"></h5>
-                </div>
-                <div class="col-sm text-center">
-                    <h3>Output</h3>
-                    <div class="canvas-box">
-                        <canvas id="output" width="256" height="256"></canvas>
+                </article>
+            </section>
+
+            <section class="projects">
+                <article>
+                    <h2>Projects</h2>
+                    
+                    <a href="colourisation.html" target="_blank">
+                        <div class="project">
+                            <h3>Colourisation</h3>
+                            <p>
+                                My project regarding the colourisation of images with generator models of normal and GAN training.
+                                The models are pretrained in Python in Keras and Tensorflow, then converted to a Javascript model.
+                            </p>
+                        </div>
+                    </a>
+                </article>
+            </section>
+
+            <section class="links">
+                <article>
+                    <h2>Previous Employment</h2>
+                    <div class="job">
+                        <h3>Jnr Web Developer @ Richlyn Systems Ltd</h3>
+                        <h4>July '18 to July '19</h4>
+                        <p>
+                            Developed features fixed major issues for a Property Management System <br> 
+                            Tested and developed for a Sports Booking website <br> 
+                            Overhauled Blog systems for a realtor website
+                        </p>
                     </div>
-                </div>
-            </div>
+                </article>
+                <a href="https://github.com/c20rtn" target="_blank" class="fab fa-github-square fa-2x"></a>
+                <a href="https://www.linkedin.com/in/jackcorton/" target="_blank" class="fab fa-linkedin fa-2x"></a>
+            </section>
+
+            <!--<div class="cursor"></div>-->
         </div>
-
+        <!--
         <script>
-            console.log('Hello TensorFlow');
-            console.log(tf.version);
+            const cursor = document.querySelector('.cursor');
 
-            function show_image(obj){
-                if (FileReader)
-                {
-                    var reader = new FileReader();
-                    reader.readAsDataURL(obj.files[0]);
-                    reader.onload = function (e) {
-                        var image = new Image();
-                        image.src= e.target.result;
-                        image.onload = async function () {
-                            canvas = document.querySelector("#input");
-                            ctx = canvas.getContext("2d");
-                            ctx.drawImage(image, 0, 0);
-                            colour();
-                        }
-                    }
-                }
-                else
-                {
-                    alert("boo boo")
-                }
-            }
-            function sampleimage(id){
-                canvas = document.querySelector("#input");
-                ctx = canvas.getContext("2d");
-                switch (id) {
-                    case "1":
-                        var image = document.getElementById("1"); image.crossOrigin = "Anonymous";
-                        ctx.drawImage(image, 0, 0);
-                        break;
-                    case "2":
-                        var image = document.getElementById("2");
-                        ctx.drawImage(image, 0, 0);
-                        break;
-                    case "3":
-                        var image = document.getElementById("3");
-                        ctx.drawImage(image, 0, 0);
-                        break;
-                    default:
-                        var image = document.getElementById("4");
-                        ctx.drawImage(image, 0, 0);
-                }
-                colour();
-            }
+            document.addEventListener('mousemove', e => {
+                cursor.setAttribute("style", "top: "+(e.pageY - 10)+"px; left: "+(e.pageX - 10)+"px;")
+            })
 
+            document.addEventListener('click', () => {
+                cursor.classList.add("expand");
 
-            async function colour() {
-                //get data from image
-                document.getElementById("message").innerHTML = "<div class=\"spinner\"><div class=\"double-bounce1\"></div><div class=\"double-bounce2\"></div></div>";
-                
-                document.getElementById("alpha").disabled = true;
-                document.getElementById("beta").disabled = true;
-                document.getElementById("gan").disabled = true;
-
-                canvas = document.querySelector("#input");
-                ctx = canvas.getContext("2d");
-                var imgData = ctx.getImageData(0, 0, 256, 256).data;
-                //alter image data
-                //remove A value from RGBA
-                var len = imgData.length;
-                var RGB = []
-                
-                //get RGB data
-                for (i = 0; i < len; i++) {
-                    if ((i+1) % 4 !== 0) {
-                        RGB.push(imgData[i]);
-                    }
-                }
-
-                //convert to L*A*B*
-                var RGBlen = RGB.length;
-                var LAB = [];
-                var L_layer = [];
-
-                if(document.getElementById('gan').checked){
-                    for (i = 0; i < RGBlen; i+=3) {
-                        LAB.push(rgb2lab([RGB[i], RGB[i+1], RGB[i+2]]));
-                        L_layer.push((LAB[LAB.length - 1][0] / 50) - 1);
-                    }
-                }
-                else{
-                    for (i = 0; i < RGBlen; i+=3) {
-                        LAB.push(rgb2lab([RGB[i], RGB[i+1], RGB[i+2]]));
-                        L_layer.push(LAB[LAB.length - 1][0]);
-                    }
-                }
-                //get output
-                var AB = await learn(L_layer);
-                var L_len = L_layer.length;
-                var output = [];
-
-                
-                if(document.getElementById('gan').checked){
-                    for (i = 0; i < L_len; i++) {
-                        //RGB image
-                        output.push(lab2rgb([(L_layer[i] + 1) * 50, AB[(i*2)]*128, AB[(i*2)+1]*128]));
-                    }
-                }
-                else{
-                    for (i = 0; i < L_len; i++) {
-                        //RGB image
-                        output.push(lab2rgb([L_layer[i], AB[(i*2)]*128, AB[(i*2)+1]*128]));
-                    }
-                }
-                console.log("output length - " + output.length);
-                output = output.flat();
-
-                //output in canvas
-                var width = 256,
-                    height = 256,
-                    buffer = new Uint8ClampedArray(width * height * 4); // have enough bytes
-
-                var bufflen = width * height;
-                for(var i = 0; i < bufflen; i++) {
-                    buffer[(i*4)] = output[(i*3)+0];
-                    buffer[(i*4)+1] = output[(i*3)+1];
-                    buffer[(i*4)+2] = output[(i*3)+2];
-                    buffer[(i*4)+3] = 255;
-                }
-
-                output_canvas = document.querySelector("#output");
-                output_ctx = output_canvas.getContext("2d");
-                // create imageData object
-                var idata = output_ctx.createImageData(width, height);
-
-                // set our buffer as source
-                idata.data.set(buffer);
-
-                // update canvas with new data
-                output_ctx.putImageData(idata, 0, 0);
-                document.getElementById("message").innerHTML = "<br><br><br><br><br><br>Done";
-
-                document.getElementById("alpha").disabled = false;
-                document.getElementById("beta").disabled = false;
-                document.getElementById("gan").disabled = false;
-            };
-            async function learn(input){
-                if(document.getElementById('alpha').checked){
-                    const model = await tf.loadLayersModel('https://raw.githubusercontent.com/c20rtn/c20rtn.github.io/master/Models/Alpha/js/model.json');
-                    model.summary()
-
-                    let output = model.predict(tf.tensor4d(input, [1, 256, 256, 1]));
-                    let values = output.dataSync();
-                    let arr = Array.from(values);
-
-                    console.log("Output - " + arr.length)
-
-                    return arr;
-                }
-                else if(document.getElementById('beta').checked){
-                    const model = await tf.loadLayersModel('https://raw.githubusercontent.com/c20rtn/c20rtn.github.io/master/Models/Beta/js/model.json');
-                    model.summary()
-
-                    let output = model.predict(tf.tensor4d(input, [1, 256, 256, 1]));
-                    let values = output.dataSync();
-                    let arr = Array.from(values);
-
-                    console.log("Output - " + arr.length)
-
-                    return arr;
-                }
-                else{
-                    const model = await tf.loadLayersModel('https://raw.githubusercontent.com/c20rtn/c20rtn.github.io/master/Models/GAN/js/model.json');
-                    model.summary()
-
-                    let output = model.predict(tf.tensor4d(input, [1, 256, 256, 1]));
-                    let values = output.dataSync();
-                    let arr = Array.from(values);
-
-                    console.log("Output - " + arr.length)
-
-                    return arr;
-                }
-            }
-
-            function lab2rgb(lab){
-                var y = (lab[0] + 16) / 116,
-                    x = lab[1] / 500 + y,
-                    z = y - lab[2] / 200,
-                    r, g, b;
-
-                x = 0.95047 * ((x * x * x > 0.008856) ? x * x * x : (x - 16/116) / 7.787);
-                y = 1.00000 * ((y * y * y > 0.008856) ? y * y * y : (y - 16/116) / 7.787);
-                z = 1.08883 * ((z * z * z > 0.008856) ? z * z * z : (z - 16/116) / 7.787);
-
-                r = x *  3.2406 + y * -1.5372 + z * -0.4986;
-                g = x * -0.9689 + y *  1.8758 + z *  0.0415;
-                b = x *  0.0557 + y * -0.2040 + z *  1.0570;
-
-                r = (r > 0.0031308) ? (1.055 * Math.pow(r, 1/2.4) - 0.055) : 12.92 * r;
-                g = (g > 0.0031308) ? (1.055 * Math.pow(g, 1/2.4) - 0.055) : 12.92 * g;
-                b = (b > 0.0031308) ? (1.055 * Math.pow(b, 1/2.4) - 0.055) : 12.92 * b;
-
-                return [Math.round(Math.max(0, Math.min(1, r)) * 255), 
-                        Math.round(Math.max(0, Math.min(1, g)) * 255), 
-                        Math.round(Math.max(0, Math.min(1, b)) * 255)]
-            }
-
-
-            function rgb2lab(rgb){
-                var r = rgb[0] / 255, g = rgb[1] / 255, b = rgb[2] / 255, x, y, z;
-
-                r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
-                g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
-                b = (b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
-
-                x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
-                y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
-                z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
-
-                x = (x > 0.008856) ? Math.pow(x, 1/3) : (7.787 * x) + 16/116;
-                y = (y > 0.008856) ? Math.pow(y, 1/3) : (7.787 * y) + 16/116;
-                z = (z > 0.008856) ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
-
-                return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)]
-            }
-
-
+                setTimeout(() => {
+                    cursor.classList.remove("expand");
+                }, 500)
+            })
         </script>
+        -->
+        <script src="https://kit.fontawesome.com/7774da70ef.js" crossorigin="anonymous"></script>
     </body>
+
 </html>
